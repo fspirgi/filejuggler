@@ -172,6 +172,10 @@ sub fj_unlink_func {
 	return sub {
 		my $file = shift;
 		return 0 unless (shift());
+		if (-d $file) {
+			$logf->("ERROR: $file is a directory, not unlinked, something's rotten");
+			return 0;
+		}
 		if (unlink($file)) {
 			$logf->("Unlink $file");
 			return 1;
