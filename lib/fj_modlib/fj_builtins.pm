@@ -423,9 +423,8 @@ sub get_timeout {
 	my $secs = shift;
 	my $timethen = time() + $secs;
 	return sub {
-		return ($timethen <= time());
+		return ( $timethen <= time() );
 	}
-	return 1;
 }
 
 
