@@ -3,18 +3,31 @@
 makefile like execution environment in a rather early stage but already usable
 
 Commands:
+
 copy "targetdir" 
+
 move "targetdir" 
+
 unlink 
+
 convert [du]
+
 exists 
+
 grep "regexp" [verbose]
+
 age "min" "max"
+
 not "func"
+
 noweep "func"
+
 rename "regexp" "to"
+
 log "something"
+
 match "regexp"
+
 waitfor "func"
 
 
