@@ -37,6 +37,9 @@ my %fj_config;
 sub fj_setup {
 	$fj_config{'STATE'} = shift || &fj_state_func;
 	$fj_config{'LOG'} = shift || &fj_log_func;
+	$fj_config{'TMOUT'} = 300;
+	$fj_config{'POLLINT'} = 1;
+	$fj_config{'CONFIRMS'} = 1;
 }
 
 # each function will get a filename (which can be a directory) and a type (1 = normal file, 0 = special file)
@@ -339,6 +342,35 @@ sub fj_noweep_func {
 		return 1;
 	}
 }
+
+# waitfor function
+# waitfor()
+# modifiers at the end of the command starting with 'mod
+# 'mod <maxtime> [<polling interval> [<times successful>]]
+sub fj_wait_for {
+	my $func = shift; 
+	return sub {
+		my $file = shift;
+		my $tmout = get_timeout($fj_config{'TMOUT'});
+		my $successful_runs = 0;
+		my $retval = 0;
+		while (1) {
+			if (&$func($file)) {
+				$successful_runs++;
+				if ( ($retval == 1) && ($runs == $fj_config{'CONFIRMS'}) ) {
+					return 1;
+				} else {
+					$successful_runs = 0;
+				}
+			}
+			return 0 if (&$tmout());
+			sleep $fj_config{'POLLINT'};
+		}
+	}
+
+}
+
+
 # helper function
 # checks whether a timestamp is between max or minage 
 # bool chk_time(timestamp, maxage, minage)
@@ -384,6 +416,17 @@ sub get_age_val {
         return $curtime - $minval;
 }
 
+# helper function
+# sets a timeout
+# get_timeout(<sec>) will get you a function back that returns false as long as timeout is not gone
+sub get_timeout {
+	my $secs = shift;
+	my $timethen = time() + $secs;
+	return sub {
+		return ($timethen <= time());
+	}
+	return 1;
+}
 
 
 
