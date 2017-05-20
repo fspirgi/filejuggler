@@ -26,7 +26,7 @@ sub rules_executor {
 	my $funclist;
 	foreach my $task (@$target) {
 		my $cmd = shift(@$task);
-		if ($cmd eq "not" || $cmd eq "noweep") {
+		if ($cmd eq "not" || $cmd eq "noweep" || $cmd eq "waitfor") {
 			my $ncmd = shift(@$task);
 			push(@$funclist,&fj_commands::catalog()->{$cmd}(&fj_commands::catalog()->{$ncmd}(@$task)));	
 			next;
