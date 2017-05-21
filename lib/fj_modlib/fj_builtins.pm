@@ -4,6 +4,7 @@ package fj_builtins;
 
 use File::Copy;
 use File::Basename;
+use fj_config;
 
 # provides function is mandatory for all modules
 # returns a ref to a hash. The hash key is the command provided,
@@ -37,9 +38,6 @@ my %fj_config;
 sub fj_setup {
 	$fj_config{'STATE'} = shift || &fj_state_func;
 	$fj_config{'LOG'} = shift || &fj_log_func;
-	$fj_config{'TMOUT'} = 300;
-	$fj_config{'POLLINT'} = 1;
-	$fj_config{'CONFIRMS'} = 1;
 }
 
 # each function will get a filename (which can be a directory) and a type (1 = normal file, 0 = special file)
@@ -345,26 +343,25 @@ sub fj_noweep_func {
 
 # waitfor function
 # waitfor()
-# modifiers at the end of the command starting with 'mod
-# 'mod <maxtime> [<polling interval> [<times successful>]]
-sub fj_wait_for {
+sub fj_waitfor_func {
 	my $func = shift; 
 	return sub {
 		my $file = shift;
-		my $tmout = get_timeout($fj_config{'TMOUT'});
+		my $tmout = get_timeout($fj_config::fj_config->{'tmout'});
 		my $successful_runs = 0;
 		my $retval = 0;
 		while (1) {
-			if (&$func($file)) {
+			print "Working on $file\n";
+			if ($retval = &$func($file)) {
 				$successful_runs++;
-				if ( ($retval == 1) && ($runs == $fj_config{'CONFIRMS'}) ) {
+				if ( ($retval == 1) && ($runs == $fj_config::fj_config->{'confirms'}) ) {
 					return 1;
 				} else {
-					$successful_runs = 0;
+					$successful_runs = 0 if ($retval != 1);
 				}
 			}
 			return 0 if (&$tmout());
-			sleep $fj_config{'POLLINT'};
+			sleep $fj_config::fj_config->{'pollint'};
 		}
 	}
 
