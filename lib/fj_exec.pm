@@ -88,16 +88,6 @@ sub setup {
 	&fj_commands::find_modules();
 }
 
-# helper function
-# # sets a timeout
-# # get_timeout(<sec>) will get you a function back that returns false as long as timeout is not gone
-sub get_timeout {
-	my $secs = shift;
-        my $timethen = time() + $secs;
-        return sub {
-		return ( $timethen <= time() );
-        }
-}
 
 # END
 1;
