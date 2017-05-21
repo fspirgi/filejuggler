@@ -341,33 +341,6 @@ sub fj_noweep_func {
 	}
 }
 
-# waitfor function
-# waitfor()
-sub fj_waitfor_func {
-	my $func = shift; 
-	return sub {
-		my $file = shift;
-		my $tmout = get_timeout($fj_config::fj_config->{'tmout'});
-		my $successful_runs = 0;
-		my $retval = 0;
-		while (1) {
-			print "Working on $file\n";
-			if ($retval = &$func($file)) {
-				$successful_runs++;
-				if ( ($retval == 1) && ($runs == $fj_config::fj_config->{'confirms'}) ) {
-					return 1;
-				} else {
-					$successful_runs = 0 if ($retval != 1);
-				}
-			}
-			return 0 if (&$tmout());
-			sleep $fj_config::fj_config->{'pollint'};
-		}
-	}
-
-}
-
-
 # helper function
 # checks whether a timestamp is between max or minage 
 # bool chk_time(timestamp, maxage, minage)

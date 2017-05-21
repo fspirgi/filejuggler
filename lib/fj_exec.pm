@@ -49,14 +49,12 @@ sub tree_executor {
 
 	$logf->("Dependencies...");
 	my $noweep = 0;
-	my $waitfor = 0;
 	while (my $dep = pop(@{$tree->[1]{$target}})) {
 		if ($dep =~ /~/) {
 			# modifier available
 			my @t = split(/~/,$dep);
 			$dep = $t[0];
 			$noweep = 1 if ($t[1] eq "noweep");
-			$waitfor = 1 if ($t[1] eq "waitfor");
 		}
 		$logf->("Target $dep");
 		unless (&rules_executor($tree->[0]{$dep})) {
@@ -64,26 +62,6 @@ sub tree_executor {
 				$logf->("$dep execution failed but noweep specified");
 				$noweep = 0;
 				next;
-			}
-			if ($waitfor) {
-				$logf->("$dep execution failed, waitfor specified, try again...");
-				my $okcount = 0;
-				my $tmout = get_timeout($fj_config::fj_config->{'tmout'});
-				while (1) {
-					# ERROR rules_executor does a shift, values not available
-					# anymore... Thinking how to do that...
-					if (&rules_executor($tree->[0]{$dep})) {
-						$okcount++;
-						if ($okcount >= $fj_config::fj_config->{'confirms'}) {
-							$waitfor = 0;
-							next;
-						}
-					} else {
-						$okcount = 0;
-					}
-					$waitfor = 0 if (&$tmout());
-					sleep $fj_config::fj_config->{'pollint'};
-				}
 			}
 			$logf->("$dep execution failed, leaving...");
 			if (defined $tree->[0]{$dep}[0][1]) {
