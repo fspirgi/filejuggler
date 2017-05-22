@@ -28,9 +28,6 @@ log "something"
 
 match "regexp"
 
-waitfor "func"
-
-
 nonexisting commands are given to the system command interpreter
 
 prepend the command with "noweep" to let it return always successfully
