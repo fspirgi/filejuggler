@@ -29,7 +29,8 @@ sub fj_provides {
 		"rename" => \&fj_rename_func,
 		"convert" => \&fj_convert_func,
 		"grep" => \&fj_grep_func,
-		"suffix" => \&fj_suffix_func
+		"suffix" => \&fj_suffix_func,
+		"system" => \&fj_system_func
 	};
 }
 
@@ -313,6 +314,17 @@ sub fj_fage_func {
 		}
 		# something's rotten if we get here
 		&fj_log_func()->("ERROR: STAT $file failed: $!");
+	}
+}
+
+# system function, this is the default function, when something is called, that does not exist.
+# The command is given to the system
+sub fj_system_func {
+	my ($command,@args) = @_;
+	return sub {
+		my $file = shift;
+		&fj_log_func()->("Executing $command on $file");
+		return (system($command,@args,$file) ? 0 : 1);
 	}
 }
 
