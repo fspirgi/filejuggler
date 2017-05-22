@@ -12,7 +12,7 @@ unlink
 
 convert [du]
 
-exists 
+exists (this command really does not make any sense, if you find out why, I understood the program. It took me a while.)
 
 grep "regexp" [verbose]
 
