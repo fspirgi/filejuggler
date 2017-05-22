@@ -29,8 +29,7 @@ sub fj_provides {
 		"rename" => \&fj_rename_func,
 		"convert" => \&fj_convert_func,
 		"grep" => \&fj_grep_func,
-		"suffix" => \&fj_suffix_func,
-		"filewatch" => \&fj_filewatch_func
+		"suffix" => \&fj_suffix_func
 	};
 }
 
@@ -197,6 +196,7 @@ sub fj_exists_func {
 	my $exists = 0;
 	return sub {
 		my $file = shift;
+		# of course file exists, we would not get here!
 		if (-e $file) {
 			$logf->("$file exists");
 			$exists = 1;
@@ -316,40 +316,6 @@ sub fj_fage_func {
 	}
 }
 
-# sub fj_filewatch_func($howlong,$pollint,$confirms)
-# watches whether a file is there for $howlong seconds, looks every $pollint seconds and returns when it didn't change after looking $confirms times
-#
-sub fj_filewatch_func {
-	my ($filename,$howlong,$pollint,$confirms) = @_;
-	$howlong = 300 unless ($howlong);
-	$pollint = 1 unless ($pollint);
-	$confirms = 1 unless ($confirms);
-
-	return sub {
-		my $file = shift;
-		my $tmout = get_timeout($howlong);
-		my $filesize = 0;
-		my $samesize = 0;
-		while ( ! &$tmout() ) {
-			if (-f $file) {
-				# file is there, let's see how big it is
-				# and compare it to the last file size
-				my $csize = (stat($file))[7];
-				if ( $csize == $filesize ) {
-					$samesize++;
-					if ($samesize >= $confirms) {
-						return 1;
-					}
-				} else {
-					$filesize = $csize;
-				}
-			}
-			sleep $pollint;
-		}
-		return 0;
-	}
-}
-
 # not and noweep functions
 # returns true on failure or true anyway respectively of the function attached 
 # this is special because the caller needs to extract exact function pointer
@@ -432,20 +398,6 @@ sub get_timeout {
 		return ( $timethen <= time() );
 	}
 }
-
-
-# helper function
-# sets a timeout
-# get_timeout(<sec>) will get you a function back that returns false as long as timeout is not gone
-sub get_timeout {
-	my $secs = shift;
-        my $timethen = time() + $secs;
-        return sub {
-		return ( $timethen <= time() );
-        }
-}
-#
-
 
 
 # END
