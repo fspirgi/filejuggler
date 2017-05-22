@@ -12,7 +12,7 @@ unlink
 
 convert [du]
 
-exists 
+exists (this command really does not make any sense, if you find out why, you understood the program. It took me a while.)
 
 grep "regexp" [verbose]
 
@@ -27,9 +27,6 @@ rename "regexp" "to"
 log "something"
 
 match "regexp"
-
-waitfor "func"
-
 
 nonexisting commands are given to the system command interpreter
 
