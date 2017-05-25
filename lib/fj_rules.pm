@@ -26,7 +26,7 @@ sub tokens {
 	return \@tokens;
 }
 
-# just sets up the targets without dependencies for now
+# sets up the targets 
 sub targets {
 	my $tokens = tokens();
 	my %targets;

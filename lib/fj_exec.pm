@@ -6,6 +6,7 @@ use fj_commands;
 use fj_walker;
 use fj_rules;
 use fj_config;
+use Data::Dumper;
 
 # just call the task_executor
 sub rules_executor {
@@ -19,13 +20,14 @@ sub rules_executor {
 	# else function
 	my $efunc = sub { return 1 };
 	if (@elsefunc) {
-		$efunc = &fj_commands::catalog()->{$elsefunc[0]}(@elsefunc[1,]);
+		$efunc = &fj_commands::catalog()->{$elsefunc[0]}(@elsefunc[1,-1]);
 	}
 
 
 	# list of functions to be executed
 	my $funclist;
 	foreach my $task (@$target) {
+		print Dumper($task);
 		my $cmd = shift(@$task);
 		unless (exists(&fj_commands::catalog()->{$cmd})) {
 			unshift(@$task,$cmd);
@@ -34,8 +36,8 @@ sub rules_executor {
 		if ($cmd eq "not" || $cmd eq "noweep") {
 			my $ncmd = shift(@$task);
 			unless (exists(&fj_commands::catalog()->{$ncmd})) {
-				unshift(@$task,$cmd);
-				$cmd = "system";
+				unshift(@$task,$ncmd);
+				$ncmd = "system";
 			}
 			push(@$funclist,&fj_commands::catalog()->{$cmd}(&fj_commands::catalog()->{$ncmd}(@$task)));	
 			next;
@@ -73,7 +75,7 @@ sub tree_executor {
 			}
 			$logf->("$dep execution failed, leaving...");
 			if (defined $tree->[0]{$dep}[0][1]) {
-				my ($command,@errcmd) = @{$tree->[0]{$dep}[0]}[1,];
+				my ($command,@errcmd) = @{$tree->[0]{$dep}[0]}[1,-1];
 				&fj_commands::catalog()->{$command}(@errcmd)->($dep);
 			}
 			# just leave the building

@@ -321,6 +321,7 @@ sub fj_fage_func {
 # The command is given to the system
 sub fj_system_func {
 	my ($command,@args) = @_;
+	print "Command: $command, args: @args\n";
 	return sub {
 		my $file = shift;
 		&fj_log_func()->("Executing $command on $file");
