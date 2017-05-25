@@ -6,7 +6,6 @@ use fj_commands;
 use fj_walker;
 use fj_rules;
 use fj_config;
-use Data::Dumper;
 
 # just call the task_executor
 sub rules_executor {
@@ -27,7 +26,6 @@ sub rules_executor {
 	# list of functions to be executed
 	my $funclist;
 	foreach my $task (@$target) {
-		print Dumper($task);
 		my $cmd = shift(@$task);
 		unless (exists(&fj_commands::catalog()->{$cmd})) {
 			unshift(@$task,$cmd);
