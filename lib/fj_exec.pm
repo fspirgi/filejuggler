@@ -5,7 +5,6 @@ package fj_exec;
 use fj_commands;
 use fj_walker;
 use fj_rules;
-use fj_config;
 
 # just call the task_executor
 sub rules_executor {

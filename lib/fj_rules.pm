@@ -1,6 +1,5 @@
 package fj_rules;
 
-use Data::Dumper;
 use FindBin qw($Bin);
 
 my $rulesfile = "$Bin/../etc/fjrules.in";

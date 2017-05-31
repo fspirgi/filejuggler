@@ -11,13 +11,9 @@ use fj_walker;
 use fj_rules;
 use fj_commands;
 use fj_exec;
-use fj_config;
 
 # Get the option
-GetOptions( "service|s" => \$service, "rcfile|f=s" => \$rcfile ) || die "Error in command line parsing";
-
-$rcfile = "$Bin/../etc/fjrc" unless ($rcfile);
-&fj_config::read_rcfile($rcfile);
+GetOptions( "service|s" => \$service ) || die "Error in command line parsing";
 
 $ret = 0;
 

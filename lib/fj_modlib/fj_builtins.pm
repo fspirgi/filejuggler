@@ -4,7 +4,6 @@ package fj_builtins;
 
 use File::Copy;
 use File::Basename;
-use fj_config;
 
 # provides function is mandatory for all modules
 # returns a ref to a hash. The hash key is the command provided,
