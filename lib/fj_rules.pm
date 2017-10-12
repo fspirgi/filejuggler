@@ -25,7 +25,7 @@ sub tokens {
 	return \@tokens;
 }
 
-# sets up the targets 
+# sets up the targets and returns a tree
 sub targets {
 	my $tokens = tokens();
 	my %targets;
