@@ -1,38 +1,40 @@
 # filejuggler
 
+## Description
+
 makefile like execution environment in a rather early stage but already usable
 
-Commands:
+## Commands
 
-copy "targetdir" 
+- copy "targetdir" 
 
-move "targetdir" 
+- move "targetdir" 
 
-unlink 
+- unlink 
 
-convert [du]
+- convert [du]
 
-exists (this command really does not make any sense, if you find out why, you understood the program. It took me a while.)
+- exists (this command really does not make any sense, if you find out why, you understood the program. It took me a while.)
 
-grep "regexp" [verbose]
+- grep "regexp" [verbose]
 
-age "min" "max"
+- age "min" "max"
 
-not "func"
+- not "func"
 
-noweep "func"
+- noweep "func"
 
-rename "regexp" "to"
+- rename "regexp" "to"
 
-log "something"
+- log "something"
 
-match "regexp"
+- match "regexp"
 
-nonexisting commands are given to the system command interpreter
+- nonexisting commands are given to the system command interpreter
 
-prepend the command with "noweep" to let it return always successfully
+Prepend the command with "noweep" to let it return always successfully.
 
-targets and dependencies
+## Targets and Dependencies
 
 target: [dep1 dep2 dep3 ...]
 
